@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Auth website</title>
+  </head>
+
+  <!-- Axios -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+
+  <script>
+    //signup
+    async function signup() {
+      const username = document.getElementById("signup-username").value;
+      const password = document.getElementById("signup-password").value;
+
+      await axios.post("http://localhost:3000/signup", {
+        username: username,
+        password: password,
+      });
+      alert("You are signed up");
+    }
+
+    //signin
+    async function signin() {
+      const username = document.getElementById("signin-username").value;
+      const password = document.getElementById("signin-password").value;
+
+      const response = await axios.post("http://localhost:3000/signin", {
+        username: username,
+        password: password,
+      });
+      localStorage.setItem("token", response.data.token);
+      alert("You are signed in");
+
+      //information
+      async function getUserinformation() {
+        const result = await axios.get("http://localhost:3000/me", {
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        });
+        document.getElementById(
+          "information"
+        ).innerHTML = `Username: ${result.data.username} Password: ${result.data.password}`;
+      }
+      getUserinformation();
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+    }
+  </script>
+
+  <body>
+    <!-- Sign-up -->
+    <section>
+      <div style="padding-bottom: 10px; padding-top: 5px">Sign-up</div>
+      <input
+        id="signup-username"
+        type="text"
+        name="UserName"
+        placeholder="UserName"
+      />
+      <input
+        id="signup-password"
+        type="text"
+        name="password"
+        placeholder="password"
+      />
+      <button onclick="signup()">Sign-up</button>
+    </section>
+
+    <!-- Sign-in -->
+    <section>
+      <div style="padding-bottom: 10px; padding-top: 20px">Sign-in</div>
+      <input
+        id="signin-username"
+        type="text"
+        name="UserName"
+        placeholder="UserName"
+      />
+      <input
+        id="signin-password"
+        type="text"
+        name="password"
+        placeholder="password"
+      />
+      <button onclick="signin()">Sign-in</button>
+    </section>
+
+    <!-- Users information -->
+    <section>
+      <div style="padding-bottom: 10px; padding-top: 20px">
+        User's Information
+      </div>
+      <div id="information"></div>
+    </section>
+
+    <!-- Log out -->
+    <section>
+      <button onclick="logout()">Log-out</button>
+    </section>
+  </body>
+</html>
