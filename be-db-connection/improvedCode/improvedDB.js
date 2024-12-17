@@ -1,3 +1,4 @@
+"use strict";
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -7,6 +8,7 @@ const User = new Schema({
   email: String,
   password: { type: String, unique: true },
   name: String,
+  // salt: String,
 });
 
 const Todo = {
