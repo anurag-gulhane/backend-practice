@@ -18,7 +18,7 @@ const Todo = {
 };
 
 const UserModel = mongoose.model("users", User);
-const TodoModel = mongoose.model("users_tods", Todo);
+const TodoModel = mongoose.model("users_todos", Todo);
 
 module.exports = {
   UserModel,
