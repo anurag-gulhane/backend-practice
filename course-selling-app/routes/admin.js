@@ -1,6 +1,10 @@
 const { Router } = require("express");
 const adminRouter = Router();
 
+// console.log("Inside Admin");
+
+const { adminModel } = require("../db");
+
 // SIGNUP END POINT
 adminRouter.post("/signup", function (req, res) {});
 

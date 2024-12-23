@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const userRouter = Router();
 
+// console.log("Inside Users");
+
 // SIGNUP END POINT
 userRouter.post("/signup", function (req, res) {});
 
