@@ -1,7 +1,8 @@
 "use strict";
 const { Router } = require("express");
 const userRouter = Router();
-const { usersModel } = require("../db");
+const { usersModel, purchaseModel } = require("../db");
+const { userMiddleware } = require("../Middlewares/userMiddlewares");
 
 const mongoose = require("mongoose");
 const { z } = require("zod");
@@ -11,42 +12,8 @@ const jwt = require("jsonwebtoken");
 const saltRounds = 5;
 const JWT_USERS_SECRET = process.env.JWT_USERS_SECRET;
 
+//---------------------------------
 // SIGNUP END POINT
-// userRouter.post("/signup", async function (req, res) {
-//   const { email, password, firstName, lastName } = req.body;
-//   try {
-//     const validation = z.object({
-//       email: z.string().min(3).max(20).email(),
-//       password: z.string().min(3).max(30),
-//       firstName: z.string().min(3).max(30),
-//       lastName: z.string().min(3).max(30),
-//     });
-
-//     const safeParesValidation = validation.safeParse(req.body);
-
-//     if (!safeParesValidation.success) {
-//       res.json({
-//         Message: "Bad credentials 👎",
-//         Error: safeParesValidation.error.errors,
-//       });
-//     } else {
-//       const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-//       await usersModel.create({
-//         email: email,
-//         password: hashedPassword,
-//         firstName: firstName,
-//         lastName: lastName,
-//       });
-
-//       res.json({
-//         Message: "Successfully Signed up 🎉",
-//       });
-//     }
-//   } catch (err) {
-//     console.log("Caugth in CATCH");
-//   }
-// });
 userRouter.post("/signup", async function (req, res) {
   const { email, password, firstName, lastName } = req.body;
   try {
@@ -137,7 +104,15 @@ userRouter.post("/login", async function (req, res) {
 });
 
 // ALL THE USERS-COURSES
-userRouter.get("/purchases", function (req, res) {});
+userRouter.get("/mypurchases", userMiddleware, async function (req, res) {
+  const userID = req.userID;
+
+  const response = await purchaseModel.find({ userID });
+
+  res.json({
+    response,
+  });
+});
 
 module.exports = {
   userRouter: userRouter,

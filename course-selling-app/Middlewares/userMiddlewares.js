@@ -8,6 +8,7 @@ function userMiddleware(req, res, next) {
 
   if (response) {
     req.userID = response.id;
+    next();
   } else {
     res.status(403).json({
       Message: "Incorrect Creds",
